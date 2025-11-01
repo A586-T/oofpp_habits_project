@@ -36,7 +36,7 @@ class HabitRepo:
         with self._connect() as con:
             con.executescript(SCHEMA)
 
-    # ----- Habits -----
+    #Habits
     def add_habit(self, name: str, periodicity: str, created_at: Optional[datetime] = None) -> int:
         created_at = created_at or datetime.utcnow()
         with self._connect() as con:
@@ -70,7 +70,7 @@ class HabitRepo:
             return None
         return Habit(id=row[0], name=row[1], periodicity=row[2], created_at=datetime.fromisoformat(row[3]))
 
-    # ----- Check-offs -----
+    #Check-offs
     def check_off(self, habit_id: int, when: Optional[datetime] = None):
         when = when or datetime.utcnow()
         with self._connect() as con:
@@ -103,8 +103,8 @@ class HabitRepo:
         now = datetime.utcnow().replace(microsecond=0)
         for hid, (_, p) in zip(ids, habits):
             if p == "daily":
-                for d in range(28):  # 4 weeks
-                    if (d % 13) != 0:  # miss a day sometimes
+                for d in range(28):  #4 weeks
+                    if (d % 13) != 0:  #miss a day sometimes
                         self.check_off(hid, when=now - timedelta(days=(27 - d)))
             else:
                 for w in range(4):
