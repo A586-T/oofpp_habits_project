@@ -1,17 +1,17 @@
 # Habit Tracker (Python 3.7+)
 
-A minimal habit tracking backend demonstrating Object Oriented Programming, Functional Programming, and SQLite persistence using only the Python standard library. Developed for the IU module DLBDSOOFPP01 (Object Oriented and Functional Programming with Python).
+A minimal habit tracking backend demonstrating Object Oriented Programming, Functional Programming, and SQLite persistence using only the Python standard library. Developed for the IU module DLBDSOOFPP01.
 
 ---
 
 ## Features
 
-- OOP core: Habit dataclass and HabitRepo repository for persistence  
-- Functional analytics: pure functions for listing habits, filtering by periodicity, and calculating longest streaks  
-- SQLite persistence: automatic schema creation, foreign key enforcement, and storage in data/habits.sqlite  
-- CLI interface: simple text based menu  
-- Unit tests: each test uses an isolated temporary SQLite database  
-- No external dependencies: Python standard library only  
+- OOP core: Habit dataclass and HabitRepo repository  
+- Functional analytics: pure functions for periodicity filtering and streak computation  
+- SQLite persistence with automatic schema creation  
+- CLI interface using standard input and output  
+- Unit tests using isolated temporary databases  
+- No external dependencies  
 
 ---
 
@@ -21,13 +21,13 @@ From the project root directory:
 
 ```bash
 python -m habits.cli
-The CLI menu allows you to:
+The CLI allows you to:
 
 list habits
 
-filter by daily or weekly periodicity
+filter by daily or weekly
 
-create new habits
+create habits
 
 delete habits
 
@@ -37,9 +37,9 @@ view longest streaks
 
 If the database is empty, the application seeds:
 
-five predefined habits (daily and weekly)
+five predefined habits
 
-approximately four weeks of sample check offs
+four weeks of sample check offs
 
 Running Tests
 Run all tests with:
@@ -47,23 +47,23 @@ Run all tests with:
 bash
 Copy code
 python -m unittest
-The test suite uses a temporary SQLite database for each test run. This ensures:
+Each test run uses a temporary SQLite database to ensure:
 
-full isolation from the main application database
+isolation from the main database
 
 no UNIQUE constraint conflicts
 
-deterministic and repeatable test results
+deterministic and repeatable results
 
 Project Structure
 kotlin
 Copy code
-habits/         models, storage logic, CLI entry point  
-analytics/      functional analytics helpers  
-tests/          unit tests  
-data/           database file and seed fixtures  
-docs/           UML diagrams and Phase deliverables  
-README.md       this file  
+habits/         models, storage logic, CLI entry point
+analytics/      functional analytics helpers
+tests/          unit tests
+data/           database file and seed fixtures
+docs/           UML diagrams and Phase deliverables
+README.md       this file
 Python Version
 Requires Python 3.7 or higher.
 
@@ -82,9 +82,8 @@ pathlib
 tempfile
 
 Notes
-SQLite foreign keys are enforced with:
-PRAGMA foreign_keys = ON
+SQLite foreign keys are enabled with PRAGMA foreign_keys = ON
 
-The seed function runs only when the database is empty and does not overwrite user data
+Seed data is inserted only if the database is empty
 
-Streak calculations correctly follow daily versus weekly rules
+Streak rules differentiate correctly between daily and weekly habits
