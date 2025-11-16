@@ -1,23 +1,83 @@
-Habit Tracker – Python 3.7+
+# Habit Tracker (Python 3.7+)
 
-This project is a minimal habit tracking backend demonstrating object-oriented programming, functional programming, and SQLite persistence using only the Python standard library. It was developed for the IU module DLBDSOOFPP01 – Object Oriented and Functional Programming with Python.
+A minimal habit tracking backend demonstrating Object Oriented Programming, Functional Programming, and SQLite persistence using only the Python standard library. Developed for the IU module DLBDSOOFPP01 – Object Oriented and Functional Programming with Python.
 
-The application includes an OOP core consisting of the Habit dataclass and the HabitRepo repository for data persistence. Functional analytics are provided through pure helper functions capable of listing habits, filtering by periodicity, computing the longest streak for a given habit, and determining the longest streak overall. The system uses a lightweight SQLite database with automatic schema creation and foreign key support, with local storage at data/habits.sqlite. A simple CLI interface allows users to list, filter, create, delete, check off habits, and view streaks. Unit tests are included and run against a temporary SQLite database to ensure isolation and reliability. The project uses no external dependencies and relies entirely on the Python standard library.
+## Features
 
-To run the application, open a terminal in the project root and execute: python -m habits.cli
-The command launches the text-based menu. If the database is empty, the system automatically seeds five predefined habits, including daily and weekly periodicities, along with approximately four weeks of sample check-off data.
+- OOP core: Habit dataclass and HabitRepo repository for persistence.
+- Functional analytics: pure functions for listing habits, filtering by periodicity, and calculating longest streaks.
+- SQLite persistence: automatic schema creation, foreign key enforcement, and local storage in data/habits.sqlite.
+- CLI interface: simple text based menu for interaction.
+- Unit tests: isolated test database created automatically for each test run.
+- No external dependencies: uses only the Python standard library.
 
-To run the test suite, use: python -m unittest
-Tests automatically create a temporary SQLite database for each run, ensuring that the test environment does not interfere with production data and eliminating UNIQUE constraint conflicts. This setup guarantees deterministic, repeatable, and isolated test behaviour.
+## Quick Start
 
-The project structure is organised as follows:
-habits – models, storage logic, and CLI entry point
-analytics – functional analytics helpers
-tests – unit tests
-data – database file and sample seed fixtures
-docs – UML diagrams and project deliverables
-README.md – project overview and usage instructions
+From the project root directory:
 
-The project requires Python version 3.7 or higher and uses only standard library modules, including dataclasses, sqlite3, unittest, datetime, and pathlib.
+```bash
+python -m habits.cli
+The CLI menu allows you to:
 
-SQLite foreign key support is enabled using “PRAGMA foreign_keys = ON;”. The seed process executes only if the database has no existing habits, ensuring that example data is never duplicated or overwritten. Streak calculations correctly differentiate between daily and weekly rules and follow a deterministic logic based on recorded timestamps.
+list habits
+
+filter by daily or weekly periodicity
+
+create or delete habits
+
+check off a habit
+
+view longest streaks
+
+If the database is empty, the application seeds:
+
+five predefined habits (daily and weekly)
+
+approximately four weeks of sample check offs
+
+Running Tests
+Run all unittests with:
+
+bash
+Copy code
+python -m unittest
+Tests use a temporary SQLite database for full isolation. This ensures that:
+
+tests never interfere with the main application database
+
+the UNIQUE constraint on habit names never causes conflicts
+
+all tests are deterministic and repeatable
+
+Project Structure
+kotlin
+Copy code
+habits/         models, storage logic, CLI entry point
+analytics/      functional analytics helpers
+tests/          unit tests
+data/           database file and seed fixtures
+docs/           UML diagrams and Phase deliverables
+README.md       this file
+Python Version
+Requires Python 3.7 or higher.
+Uses only the following standard library modules:
+
+dataclasses
+
+sqlite3
+
+datetime
+
+unittest
+
+pathlib
+
+tempfile
+
+Notes
+Foreign keys are enforced using:
+PRAGMA foreign_keys = ON;
+
+The seed function runs only when the database is empty and does not overwrite user data.
+
+Streak calculations correctly follow daily versus weekly rules.
