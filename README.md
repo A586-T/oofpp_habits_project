@@ -17,7 +17,8 @@ From the project root directory:
 
 ```bash
 python -m habits.cli
-The CLI menu allows you to:
+
+## The CLI menu allows you to:
 
 list habits
 
