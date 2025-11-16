@@ -20,7 +20,10 @@ A minimal habit tracking backend demonstrating Object Oriented Programming, Func
 From the project root directory:
 
 run
-python -m habits.cli
+  
+  python -m habits.cli
+
+## CLI
 
 The CLI allows you to:
 
@@ -42,12 +45,10 @@ five predefined habits
 
 four weeks of sample check offs
 
-Running Tests
+## Running Tests
 Run all tests with:
 
-bash
-Copy code
-python -m unittest
+  python -m unittest
 
 Each test run uses a temporary SQLite database to ensure:
 
@@ -57,8 +58,7 @@ no UNIQUE constraint conflicts
 
 deterministic and repeatable results
 
-Project Structure
-kotlin
+## Project Structure
 Copy code
 habits/         models, storage logic, CLI entry point
 analytics/      functional analytics helpers
@@ -83,7 +83,7 @@ pathlib
 
 tempfile
 
-Notes
+## Notes
 SQLite foreign keys are enabled using PRAGMA foreign_keys = ON
 
 Seed data is inserted only if the database is empty
