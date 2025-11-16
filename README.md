@@ -21,11 +21,12 @@ From the project root directory:
 
 ```bash
 python -m habits.cli
+
 The CLI allows you to:
 
 list habits
 
-filter by daily or weekly
+filter by daily or weekly periodicity
 
 create habits
 
@@ -47,6 +48,7 @@ Run all tests with:
 bash
 Copy code
 python -m unittest
+
 Each test run uses a temporary SQLite database to ensure:
 
 isolation from the main database
@@ -82,7 +84,7 @@ pathlib
 tempfile
 
 Notes
-SQLite foreign keys are enabled with PRAGMA foreign_keys = ON
+SQLite foreign keys are enabled using PRAGMA foreign_keys = ON
 
 Seed data is inserted only if the database is empty
 
