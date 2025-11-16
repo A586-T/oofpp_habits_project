@@ -22,10 +22,9 @@ CREATE TABLE IF NOT EXISTS checkoffs (
 """
 
 class HabitRepo:
-    def __init__(self, db_path: Path = DB_PATH):
+    def __init__(self, db_path="data/habits.sqlite"):
         self.db_path = db_path
-        self.db_path.parent.mkdir(parents=True, exist_ok=True)
-        self._init_db()
+
 
     def _connect(self):
         con = sqlite3.connect(str(self.db_path))
