@@ -19,7 +19,7 @@ A minimal habit tracking backend demonstrating Object Oriented Programming, Func
 
 From the project root directory:
 
-```bash
+#```bash
 python -m habits.cli
 
 The CLI allows you to:
