@@ -18,23 +18,23 @@ From the project root directory:
 ```bash
 python -m habits.cli
 
-## The CLI menu allows you to:
+The CLI menu allows you to:
 
-list habits
+- list habits
 
-filter by daily or weekly periodicity
+- filter by daily or weekly periodicity
 
-create or delete habits
+-create or delete habits
 
-check off a habit
+-check off a habit
 
-view longest streaks
+- view longest streaks
 
-If the database is empty, the application seeds:
+- If the database is empty, the application seeds:
 
-five predefined habits (daily and weekly)
+- five predefined habits (daily and weekly)
 
-approximately four weeks of sample check offs
+- approximately four weeks of sample check offs
 
 Running Tests
 Run all unittests with:
