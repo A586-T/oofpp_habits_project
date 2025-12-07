@@ -4,12 +4,15 @@ from habits.models import Habit
 from habits.storage import HabitRepo
 
 def list_all_habits(repo: HabitRepo) -> List[Habit]:
+"""Return all habits from the repository."""
     return repo.list_habits()
 
 def list_by_periodicity(repo: HabitRepo, periodicity: str) -> List[Habit]:
+"""Return habits filtered by periodicity (daily or weekly)."""
     return [h for h in repo.list_habits() if h.periodicity == periodicity]
 
 def longest_streak_for_habit(repo: HabitRepo, habit: Habit) -> int:
+"""Compute the longest on time streak for a single habit."""
     stamps = repo.get_checkoffs(habit.id)
     if not stamps:
         return 0
@@ -18,6 +21,7 @@ def longest_streak_for_habit(repo: HabitRepo, habit: Habit) -> int:
     return _longest_consecutive_weeks(stamps)
 
 def longest_streak_overall(repo: HabitRepo) -> int:
+"""Return the best streak across all habits in the repository."""
     return max((longest_streak_for_habit(repo, h) for h in repo.list_habits()), default=0)
 
 def _longest_consecutive_days(stamps: List[datetime]) -> int:
