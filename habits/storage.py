@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS checkoffs (
   done_at TEXT NOT NULL
 );
 """
-
+"""SQLite backed repository for storing habits and their checkoffs."""
 class HabitRepo:
     def __init__(self, db_path="data/habits.sqlite"):
         self.db_path = db_path
@@ -37,6 +37,7 @@ class HabitRepo:
 
     #Habits
     def add_habit(self, name: str, periodicity: str, created_at: Optional[datetime] = None) -> int:
+    """Insert a new habit and return its database id."""
         created_at = created_at or datetime.utcnow()
         with self._connect() as con:
             cur = con.execute(
@@ -50,6 +51,7 @@ class HabitRepo:
             con.execute("DELETE FROM habits WHERE id = ?", (habit_id,))
 
     def list_habits(self) -> List[Habit]:
+    """Return all habits ordered by name."""
         with self._connect() as con:
             rows = con.execute(
                 "SELECT id, name, periodicity, created_at FROM habits ORDER BY name"
@@ -60,6 +62,7 @@ class HabitRepo:
         ]
 
     def get_habit_by_name(self, name: str) -> Optional[Habit]:
+    """Look up a single habit by its name."""
         with self._connect() as con:
             row = con.execute(
                 "SELECT id, name, periodicity, created_at FROM habits WHERE name = ?",
@@ -71,6 +74,7 @@ class HabitRepo:
 
     #Check-offs
     def check_off(self, habit_id: int, when: Optional[datetime] = None):
+    """Record a completion timestamp for the given habit."""
         when = when or datetime.utcnow()
         with self._connect() as con:
             con.execute(
