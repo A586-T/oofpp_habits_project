@@ -89,3 +89,15 @@ SQLite foreign keys are enabled using PRAGMA foreign_keys = ON
 Seed data is inserted only if the database is empty
 
 Streak rules differentiate correctly between daily and weekly habits
+
+## Screenshots
+
+CLI in action:
+
+<img width="860" height="806" alt="image" src="https://github.com/user-attachments/assets/2b2c05d7-f7e5-4116-b1c9-416778c3d63e" />
+
+
+Unit tests:
+
+<img width="1089" height="215" alt="Tests_Pass" src="https://github.com/user-attachments/assets/b0c3c427-cb9a-4884-adf6-f2b0c1496f0e" />
+
