@@ -2,40 +2,48 @@ import sqlite3
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import List, Optional
+
 from .models import Habit
 
 DB_PATH = Path("data/habits.sqlite")
 
 SCHEMA = """
 PRAGMA foreign_keys=ON;
+
 CREATE TABLE IF NOT EXISTS habits (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   name TEXT NOT NULL UNIQUE,
   periodicity TEXT NOT NULL CHECK (periodicity IN ('daily','weekly')),
   created_at TEXT NOT NULL
 );
+
 CREATE TABLE IF NOT EXISTS checkoffs (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   habit_id INTEGER NOT NULL REFERENCES habits(id) ON DELETE CASCADE,
   done_at TEXT NOT NULL
 );
 """
-"""SQLite backed repository for storing habits and their checkoffs."""
+
+
 class HabitRepo:
-    def __init__(self, db_path="data/habits.sqlite"):
+    """SQLite backed repository for storing habits and their checkoffs."""
+
+    def __init__(self, db_path: str = "data/habits.sqlite"):
         self.db_path = db_path
 
-
-    def _connect(self):
+    def _connect(self) -> sqlite3.Connection:
+        """Open a new SQLite connection with foreign keys enabled."""
         con = sqlite3.connect(str(self.db_path))
         con.execute("PRAGMA foreign_keys=ON;")
         return con
 
-    def _init_db(self):
+    def _init_db(self) -> None:
+        """Create tables if they do not exist."""
         with self._connect() as con:
             con.executescript(SCHEMA)
 
-    #Habits
+    # Habits
+
     def add_habit(
         self,
         name: str,
@@ -51,36 +59,49 @@ class HabitRepo:
             )
             return cur.lastrowid
 
-
-    def delete_habit(self, habit_id: int):
+    def delete_habit(self, habit_id: int) -> None:
+        """Delete a habit and its associated checkoffs."""
         with self._connect() as con:
             con.execute("DELETE FROM habits WHERE id = ?", (habit_id,))
 
     def list_habits(self) -> List[Habit]:
-    """Return all habits ordered by name."""
+        """Return all habits ordered by name."""
         with self._connect() as con:
             rows = con.execute(
-                "SELECT id, name, periodicity, created_at FROM habits ORDER BY name"
+                "SELECT id, name, periodicity, created_at "
+                "FROM habits ORDER BY name"
             ).fetchall()
         return [
-            Habit(id=r[0], name=r[1], periodicity=r[2], created_at=datetime.fromisoformat(r[3]))
+            Habit(
+                id=r[0],
+                name=r[1],
+                periodicity=r[2],
+                created_at=datetime.fromisoformat(r[3]),
+            )
             for r in rows
         ]
 
     def get_habit_by_name(self, name: str) -> Optional[Habit]:
-    """Look up a single habit by its name."""
+        """Return a single habit by name, or None if it does not exist."""
         with self._connect() as con:
             row = con.execute(
-                "SELECT id, name, periodicity, created_at FROM habits WHERE name = ?",
+                "SELECT id, name, periodicity, created_at "
+                "FROM habits WHERE name = ?",
                 (name,),
             ).fetchone()
         if not row:
             return None
-        return Habit(id=row[0], name=row[1], periodicity=row[2], created_at=datetime.fromisoformat(row[3]))
+        return Habit(
+            id=row[0],
+            name=row[1],
+            periodicity=row[2],
+            created_at=datetime.fromisoformat(row[3]),
+        )
 
-    #Check-offs
-    def check_off(self, habit_id: int, when: Optional[datetime] = None):
-    """Record a completion timestamp for the given habit."""
+    # Check offs
+
+    def check_off(self, habit_id: int, when: Optional[datetime] = None) -> None:
+        """Record that a habit was completed at the given time."""
         when = when or datetime.utcnow()
         with self._connect() as con:
             con.execute(
@@ -89,17 +110,23 @@ class HabitRepo:
             )
 
     def get_checkoffs(self, habit_id: int) -> List[datetime]:
+        """Return all completion timestamps for a habit, ordered by time."""
         with self._connect() as con:
             rows = con.execute(
-                "SELECT done_at FROM checkoffs WHERE habit_id = ? ORDER BY done_at",
+                "SELECT done_at FROM checkoffs "
+                "WHERE habit_id = ? ORDER BY done_at",
                 (habit_id,),
             ).fetchall()
         return [datetime.fromisoformat(r[0]) for r in rows]
 
-    def seed_if_empty(self):
-        """Seed 5 habits (>=1 daily and >=1 weekly) and 4 weeks of sample data if DB is empty."""
+    def seed_if_empty(self) -> None:
+        """
+        Seed five habits (daily and weekly) and four weeks of sample data
+        if the database is currently empty.
+        """
         if self.list_habits():
             return
+
         habits = [
             ("Drink water", "daily"),
             ("Read 20 min", "daily"),
@@ -110,11 +137,14 @@ class HabitRepo:
         ids = [self.add_habit(name, p) for name, p in habits]
 
         now = datetime.utcnow().replace(microsecond=0)
+
         for hid, (_, p) in zip(ids, habits):
             if p == "daily":
-                for d in range(28):  #4 weeks
-                    if (d % 13) != 0:  #miss a day sometimes
+                # Roughly four weeks of daily check offs
+                for d in range(28):
+                    if (d % 13) != 0:  # occasionally skip a day
                         self.check_off(hid, when=now - timedelta(days=(27 - d)))
             else:
+                # Four weekly check offs
                 for w in range(4):
                     self.check_off(hid, when=now - timedelta(days=7 * (3 - w)))
