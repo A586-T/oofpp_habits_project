@@ -19,31 +19,31 @@ A minimal habit tracking backend demonstrating Object Oriented Programming, Func
 
 From the project root directory:
 
-run
+run:
   
-  python -m habits.cli
+  - python -m habits.cli
 
 ## CLI
 
 The CLI allows you to:
 
-list habits
+- list habits
 
-filter by daily or weekly periodicity
+- filter by daily or weekly periodicity
 
-create habits
+- create habits
 
-delete habits
+- delete habits
 
-check off habits
+- check off habits
 
-view longest streaks
+- view longest streaks
 
 If the database is empty, the application seeds:
 
-five predefined habits
+- five predefined habits
 
-four weeks of sample check offs
+- four weeks of sample check offs
 
 ## Running Tests
 Run all tests with:
@@ -52,36 +52,50 @@ Run all tests with:
 
 Each test run uses a temporary SQLite database to ensure:
 
-isolation from the main database
+- isolation from the main database
 
-no UNIQUE constraint conflicts
+- no UNIQUE constraint conflicts
 
-deterministic and repeatable results
+- deterministic and repeatable results
 
 ## Project Structure
-Copy code
-habits/         models, storage logic, CLI entry point
-analytics/      functional analytics helpers
-tests/          unit tests
-data/           database file and seed fixtures
-docs/           UML diagrams and Phase deliverables
-README.md       this file
-Python Version
-Requires Python 3.7 or higher.
+- analytics/ <----> Functional analytics (filters, streak calculations)
+- data/ <----> SQLite database and seed data
+- habits/ <----> Core logic (models, storage, CLI)
+- tests/ <----> Unit tests
+- README.md <----> This file
+- .gitignore <----> Ignore unnecessary files
+
+## Technical Requirements
+- Requires Python 3.7 or higher.
+- Runs on any OS where Python is avaiable.
+
+## How it works and internals:
+
+- habits.models defines the Habit dataclass
+
+- habits.storage implements HabitRepo, encapsulating SQLite operations: schema creation, CRUD, check-offs
+
+- analytics.functions provides pure-function analytics for filtering habits and computing streaks
+
+- habits.cli implements the CLI entry point (python -m habits.cli), including seeding logic on first run
+
+- Unit tests in tests/ verify core functionality and analytics logic using temporary databases
+
 
 Uses only standard library modules:
 
-dataclasses
+- dataclasses
 
-sqlite3
+- sqlite3
 
-datetime
+- datetime
 
-unittest
+- unittest
 
-pathlib
+- pathlib
 
-tempfile
+- tempfile
 
 ## Notes
 SQLite foreign keys are enabled using PRAGMA foreign_keys = ON
@@ -101,3 +115,9 @@ Unit tests:
 
 <img width="1089" height="215" alt="Tests_Pass" src="https://github.com/user-attachments/assets/b0c3c427-cb9a-4884-adf6-f2b0c1496f0e" />
 
+## Summary
+
+This project demonstrates how object-oriented programming (for state and persistence) and functional programming (for analytics) can coexist cleanly in a small Python application.
+It provides a simple but fully functional habit-tracking backend which is perfect as a learning example or small personal tool.
+
+Enjoy tracking your habits!
