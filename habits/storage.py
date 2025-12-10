@@ -36,8 +36,13 @@ class HabitRepo:
             con.executescript(SCHEMA)
 
     #Habits
-    def add_habit(self, name: str, periodicity: str, created_at: Optional[datetime] = None) -> int:
-    """Insert a new habit and return its database id."""
+    def add_habit(
+        self,
+        name: str,
+        periodicity: str,
+        created_at: Optional[datetime] = None,
+    ) -> int:
+        """Insert a new habit and return its database id."""
         created_at = created_at or datetime.utcnow()
         with self._connect() as con:
             cur = con.execute(
@@ -45,6 +50,7 @@ class HabitRepo:
                 (name, periodicity, created_at.isoformat()),
             )
             return cur.lastrowid
+
 
     def delete_habit(self, habit_id: int):
         with self._connect() as con:
